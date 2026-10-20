@@ -1,0 +1,220 @@
+/* AUTO.DEV / Kinetic Engineering — optional, accessible visual layer */
+:root {
+  --motion-soft: cubic-bezier(.22, .72, .23, 1);
+  --motion-quiet: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+/* Scroll reveals are opt-in: the page stays readable if JS doesn't load. */
+body.motion-enabled .reveal-target {
+  opacity: 0;
+  translate: 0 14px;
+  transition: opacity .62s var(--motion-soft), translate .62s var(--motion-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+body.motion-enabled .reveal-target.is-visible {
+  opacity: 1;
+  translate: 0 0;
+
+}
+body.motion-off .reveal-target { opacity: 1 !important; translate: none !important; filter: none !important; }
+
+/* Carefully restrained light / motion cues, matching the existing engineering palette. */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: min(60vw, 640px);
+  aspect-ratio: 1;
+  right: 0;
+  top: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 11%, transparent), transparent 68%);
+  filter: blur(36px);
+  opacity: .5;
+  animation: lab-glow 22s ease-in-out infinite alternate;
+}
+.hero-art { transition: border-color .4s ease, box-shadow .5s ease; }
+.hero-art::selection { background: transparent; }
+.hero-art:hover { border-color: color-mix(in srgb, var(--accent) 36%, var(--line)); }
+.hero-art .robot-scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--accent) 5%, transparent) 50%, transparent 100%);
+  transform: translateY(-110%);
+  animation: lab-scan 14s ease-in-out infinite;
+}
+.hero-float-card { animation: lab-panel-breathe 9s ease-in-out infinite alternate; }
+.hero-float-card.float-right { animation-delay: -4s; }
+.hero .eyebrow-line { transform-origin: left center; animation: lab-ping-line 6.5s ease-in-out infinite; }
+
+/* Subtle circuit treatment only when cards receive attention. */
+.focus-card,
+.intro-card,
+.journey-story,
+.contact-wrap { transition: border-color .4s ease, box-shadow .4s ease; }
+.focus-card:hover,
+.intro-card:hover { border-color: color-mix(in srgb, var(--accent) 30%, var(--line)); }
+.focus-card .focus-icon { transition: translate .5s var(--motion-soft), rotate .5s var(--motion-soft); }
+.focus-card:hover .focus-icon { translate: 0 -3px; rotate: -7deg; }
+.skill-card .skill-symbol { transition: transform .55s var(--motion-soft), border-color .4s; }
+.skill-card:hover .skill-symbol { transform: rotate(-8deg) scale(1.07); border-color: color-mix(in srgb, var(--accent) 36%, var(--line)); }
+.project-visual::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 12%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 88%);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .6s ease;
+  pointer-events: none;
+}
+.project-card:hover .project-visual::after,
+.project-card:focus-within .project-visual::after {
+  opacity: .9;
+  animation: lab-card-scan 3s linear infinite;
+}
+.project-card .project-symbol { transition: transform .7s var(--motion-soft), opacity .45s ease; }
+.project-card:hover .project-symbol { transform: translateY(-5px) rotate(-3deg); opacity: 1; }
+.section-heading .kicker > span:empty { transform-origin: left center; }
+body.motion-enabled .section-heading.is-visible .kicker > span:empty {
+  animation: lab-ping-line 4s ease-in-out 1 .4s;
+}
+
+/* Tiny kinetic companions travel between section stations as the visitor scrolls. */
+.motion-world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+  contain: paint;
+}
+.motion-rails { display: block; height: 100%; width: 100%; opacity: .48; }
+.motion-rails path { fill: none; stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 12; opacity: .26; }
+.motion-rails circle { fill: var(--bg); stroke: var(--accent); stroke-width: 1; opacity: .55; }
+.motion-rails .rail-core { fill: var(--accent); stroke: none; opacity: .4; }
+.motion-actor {
+  position: absolute;
+  top: 0; left: 0;
+  width: 58px;
+  text-align: center;
+  color: var(--accent);
+  will-change: transform;
+  translate: -50% -50%;
+  filter: drop-shadow(0 9px 11px rgba(2, 13, 20, .23));
+}
+.motion-actor--hopper { width: 48px; color: var(--gold); }
+.motion-actor--drone { width: 43px; color: #8caec4; }
+.motion-actor .mini-loiter { animation: mini-loiter 10s ease-in-out infinite alternate; }
+.motion-actor--hopper .mini-loiter { animation-duration: 13s; animation-delay: -5s; }
+.motion-actor--drone .mini-loiter { animation: drone-scout 17s ease-in-out infinite alternate; }
+.motion-actor .mini-jumper { transform-origin: center 88%; animation: mini-hop 6.6s var(--motion-soft) infinite; }
+.motion-actor--hopper .mini-jumper { animation: mini-double-hop 7.5s var(--motion-soft) infinite -2.7s; }
+.motion-actor--drone .mini-jumper { animation: drone-hover 4.6s ease-in-out infinite; }
+.motion-actor svg { width: 100%; height: auto; display: block; overflow: visible; }
+.motion-actor .bot-outline { stroke: color-mix(in srgb, currentColor 72%, #203944); stroke-width: 1.5; }
+.motion-actor .bot-eye { fill: color-mix(in srgb, currentColor 70%, white); }
+.motion-actor .bot-leg-left { transform-origin: 28px 51px; }
+.motion-actor .bot-leg-right { transform-origin: 45px 51px; }
+.motion-actor.is-traveling .bot-leg-left { animation: mini-step-a .26s ease-in-out infinite alternate; }
+.motion-actor.is-traveling .bot-leg-right { animation: mini-step-b .26s ease-in-out infinite alternate; }
+.motion-actor.is-traveling .mini-jumper { animation-duration: 1.2s; }
+.motion-actor--drone .drone-propeller { transform-origin: center; animation: drone-rotor 3.6s linear infinite; }
+.motion-actor .bot-caption {
+  display: block;
+  margin-top: -4px;
+  font: 600 7px/1.2 Consolas, monospace;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: .03em;
+  opacity: .75;
+}
+
+/* Visitors have a compact, persistent control instead of being forced to watch motion. */
+.motion-switch {
+  position: fixed;
+  bottom: 21px;
+  left: 22px;
+  z-index: 42;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 8px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  box-shadow: 0 6px 26px rgba(0, 0, 0, .09);
+  font: 600 10px/1.2 Consolas, monospace;
+  letter-spacing: .04em;
+  backdrop-filter: blur(14px);
+  transition: border-color .3s, color .3s, background .3s;
+}
+.motion-switch:hover, .motion-switch:focus-visible { border-color: var(--accent); color: var(--ink); }
+.motion-switch:disabled { cursor: not-allowed; opacity: .66; }
+.motion-switch svg { width: 19px; height: 19px; flex: none; color: var(--accent); }
+.motion-switch .motion-led { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; opacity: .8; }
+body.motion-off .motion-switch svg { color: var(--muted); }
+body.motion-off .motion-switch .motion-led { background: var(--muted); opacity: .5; }
+body.motion-off .motion-world { display: none; }
+body.motion-off .hero::before,
+body.motion-off .hero .eyebrow-line,
+body.motion-off .hero-float-card,
+body.motion-off .hero-art .robot-scene::after,
+body.motion-off .radar-sweep,
+body.motion-off .lidar-inner { animation: none !important; }
+body.motion-off .project-card:hover .project-visual::after { animation: none !important; }
+
+@keyframes lab-glow { 0% { transform: translate3d(0, 0, 0) scale(.93); } 100% { transform: translate3d(-40px, 36px, 0) scale(1.06); } }
+@keyframes lab-scan { 0%, 20% { transform: translateY(-110%); opacity: 0; } 37% { opacity: .35; } 56% { transform: translateY(110%); opacity: 0; } 100% { transform: translateY(110%); opacity: 0; } }
+@keyframes lab-panel-breathe { 0% { translate: 0 0; } 100% { translate: 0 -5px; } }
+@keyframes lab-ping-line { 0%, 100% { scale: 1 1; opacity: .6; } 50% { scale: .58 1; opacity: .9; } }
+@keyframes lab-card-scan { from { transform: translateY(0); } to { transform: translateY(156px); } }
+@keyframes mini-loiter { 0%, 13% { transform: translateX(-10px); } 55%, 65% { transform: translateX(11px); } 100% { transform: translateX(-5px); } }
+@keyframes mini-loiter-mobile { 0%, 15% { transform: translateX(-3px); } 55% { transform: translateX(4px); } 100% { transform: translateX(-2px); } }
+@keyframes mini-hop { 0%, 33%, 37%, 72%, 76%, 100% { transform: translateY(0) rotate(0); } 35% { transform: translateY(-12px) rotate(-5deg); } 74% { transform: translateY(-5px) rotate(3deg); } }
+@keyframes mini-double-hop { 0%, 24%, 31%, 46%, 54%, 100% { transform: translateY(0) rotate(0); } 28% { transform: translateY(-11px) rotate(4deg); } 50% { transform: translateY(-19px) rotate(-4deg); } }
+@keyframes mini-step-a { to { transform: rotate(22deg); } }
+@keyframes mini-step-b { to { transform: rotate(-22deg); } }
+@keyframes drone-hover { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+@keyframes drone-scout { 0%, 14% { transform: translateX(-15px); } 51% { transform: translateX(18px); } 100% { transform: translateX(-6px); } }
+@keyframes drone-rotor { to { transform: rotate(360deg); } }
+
+@media (max-width: 1100px) {
+  .motion-actor { width: 48px; }
+  .motion-actor--hopper { width: 42px; }
+  .motion-actor--drone { width: 35px; }
+  .motion-rails { opacity: .29; }
+}
+@media (max-width: 850px) {
+  .motion-rails { display: none; }
+  .motion-actor .mini-loiter { animation-name: mini-loiter-mobile; }
+  .motion-actor { opacity: .74; width: 37px; }
+  .motion-actor--hopper { width: 32px; }
+  .motion-actor--drone { display: none; }
+  .motion-actor .bot-caption { display: none; }
+  .hero::before { opacity: .3; }
+}
+@media (max-width: 620px) {
+  .motion-switch { bottom: 12px; left: 12px; padding: 7px 9px; gap: 6px; font-size: 9px; }
+  .motion-switch svg { width: 16px; height: 16px; }
+  .motion-actor { width: 31px; opacity: .64; }
+  .motion-actor--hopper { width: 29px; }
+  body.motion-enabled .reveal-target { translate: 0 12px; filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+  body.motion-enabled .reveal-target { opacity: 1; translate: none; filter: none; }
+  .motion-world { display: none; }
+}
+@media print {
+  .motion-world, .motion-switch { display: none !important; }
+  .reveal-target { opacity: 1 !important; translate: none !important; filter: none !important; }
+}
