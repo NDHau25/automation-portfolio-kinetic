@@ -1,3 +1,5 @@
+https://ndhau25.github.io/automation-portfolio-kinetic/
+
 # AUTO.DEV — Portfolio sinh viên Kỹ thuật Tự động hóa
 
 Website portfolio **responsive, hoạt động offline**, không cần React, Node.js hay máy chủ backend. Bộ code dùng HTML, CSS và JavaScript thuần.
