@@ -11,7 +11,7 @@ window.PORTFOLIO_DEFAULTS = {
     location: 'Việt Nam',
     github: '',
     linkedin: '',
-    website: '',
+    website: '', facebook: '', youtube: '', zalo: '', tiktok: '', instagram: '',
     available: true,
     bioVi: 'Tôi là sinh viên ngành Kỹ thuật Tự động hóa, quan tâm đến hệ thống nhúng, robot, lý thuyết điều khiển và truyền thông công nghiệp. Tôi thích kết nối cảm biến, vi điều khiển và phần mềm để tạo nên các nguyên mẫu có thể đo lường và kiểm chứng.',
     bioEn: 'I am an Automation Engineering student interested in embedded systems, robotics, control theory, and industrial communication. I enjoy bringing sensors, controllers and software together to build measurable, testable prototypes.'
@@ -102,3 +102,133 @@ window.PORTFOLIO_DEFAULTS = {
     }
   ]
 };
+
+// Content aligned with the course E-Portfolio and CV writing guides.
+window.PORTFOLIO_DEFAULTS.extras = {
+  "mottoVi": "Thiết kế có cơ sở. Thử nghiệm có số liệu. Cải tiến có mục tiêu.",
+  "mottoEn": "Design with evidence. Test with data. Improve with purpose.",
+  "lifeGoalVi": "Học tập bền bỉ, làm việc có trách nhiệm và tạo ra các giải pháp kỹ thuật có ích, có thể kiểm chứng.",
+  "lifeGoalEn": "Keep learning, work responsibly and build practical, testable engineering solutions.",
+  "careerShortVi": "Tìm cơ hội thực tập hoặc vị trí kỹ thuật phù hợp để tham gia phát triển phần mềm nhúng, điều khiển và robot; rèn luyện quy trình thiết kế, thử nghiệm, báo cáo.",
+  "careerShortEn": "Seek an internship or entry-level engineering role in embedded systems, controls or robotics while improving testing and documentation skills.",
+  "careerLongVi": "Trong 3–5 năm tới, hướng tới vị trí kỹ sư có thể triển khai và tích hợp hệ thống tự động hóa từ thiết bị, giao tiếp đến giám sát và vận hành an toàn.",
+  "careerLongEn": "Within 3–5 years, work toward becoming an engineer capable of integrating safe automation systems from devices and communication to monitoring and operations.",
+  "cvPosition": "Thực tập sinh / Kỹ sư Tự động hóa",
+  "portfolioUrl": "",
+  "portraitUrl": "",
+  "dob": "",
+  "education": [
+    {
+      "id": "edu-1",
+      "title": "Chương trình Kỹ thuật Tự động hóa",
+      "organization": "[Điền tên trường, khoa]",
+      "period": "[Niên khóa]",
+      "description": "Hướng học tập: hệ thống nhúng, điều khiển, robot, truyền thông công nghiệp. Hãy bổ sung GPA, học bổng hoặc kết quả có xác nhận nếu có.",
+      "evidence": "",
+      "isPlaceholder": true
+    }
+  ],
+  "courses": [
+    {
+      "id": "course-1",
+      "title": "Thực hành lập trình vi điều khiển và cảm biến",
+      "organization": "Đồ án / thực hành tại trường",
+      "period": "",
+      "description": "STM32, Arduino, ESP32, giao tiếp I²C/UART và đọc dữ liệu cảm biến. Đây là mô tả nhóm kiến thức thực hành, không phải chứng chỉ.",
+      "evidence": ""
+    },
+    {
+      "id": "course-2",
+      "title": "Thực hành Robot & Truyền thông",
+      "organization": "Đồ án / thực hành tại trường",
+      "period": "",
+      "description": "ROS 2, LiDAR, mô phỏng, Modbus RTU/TCP và MQTT.",
+      "evidence": ""
+    }
+  ],
+  "certificates": [],
+  "experiences": [],
+  "awards": [],
+  "activities": [],
+  "hobbies": [],
+  "softSkills": [
+    "Phân tích và giải quyết vấn đề",
+    "Tự học kỹ thuật",
+    "Viết tài liệu và báo cáo thử nghiệm",
+    "Làm việc nhóm trong đồ án"
+  ],
+  "reflections": [
+    {
+      "id": "reflection-ros",
+      "title": "Trải nghiệm tích hợp LiDAR và ROS 2",
+      "period": "2026",
+      "projectId": "ros2-mobile-robot",
+      "situation": "Khi cảm biến đã lắp lên robot, dữ liệu quét chịu ảnh hưởng của vị trí lắp, TF và chuyển động của nền tảng.",
+      "actions": "Đo hình học, kiểm tra bốn hướng quét, quan sát bag LaserScan và đối chiếu khung TF khi thử nghiệm SLAM.",
+      "learning": "Một bản đồ méo không chỉ do thuật toán; trước hết phải xác minh thời gian, hướng khung tọa độ, vật cản quanh cảm biến và odometry.",
+      "next": "Hoàn thành đo che khuất và đánh giá SLAM/odometry trên robot lắp thực tế.",
+      "isSample": true
+    },
+    {
+      "id": "reflection-pid",
+      "title": "Bài học từ thử nghiệm nâng từ PID",
+      "period": "2025–2026",
+      "projectId": "magnetic-levitation-pid",
+      "situation": "Hệ nâng từ nhạy với nhiễu cảm biến, đặc tuyến cuộn hút và độ trễ điều khiển.",
+      "actions": "Đo tín hiệu Hall, quan sát điện áp và dòng của mạch kích; điều chỉnh phương pháp lấy mẫu và PID.",
+      "learning": "Phải xác minh đường dòng đo và tính đúng chiều phản hồi trước khi tăng hệ số điều khiển.",
+      "next": "Thu thập đồ thị thực nghiệm, so sánh PID và cải thiện độ ổn định.",
+      "isSample": true
+    }
+  ],
+  "media": [
+    {
+      "id": "media-ros",
+      "title": "Ảnh lắp robot và LiDAR",
+      "type": "image",
+      "url": "",
+      "description": "Chèn ảnh thật của khung robot, cảm biến và dây nối để minh chứng thiết kế.",
+      "projectId": "ros2-mobile-robot",
+      "isPlaceholder": true
+    },
+    {
+      "id": "media-pid",
+      "title": "Báo cáo PID và đồ thị đo",
+      "type": "document",
+      "url": "",
+      "description": "Thêm báo cáo PDF, ảnh sơ đồ khối và đồ thị từ quá trình thử nghiệm.",
+      "projectId": "magnetic-levitation-pid",
+      "isPlaceholder": true
+    },
+    {
+      "id": "media-esp",
+      "title": "Video demo ESP32/MQTT",
+      "type": "video",
+      "url": "",
+      "description": "Thêm video trình diễn cảm biến, màn hình OLED và chế độ AUTO/MANUAL.",
+      "projectId": "esp32-smart-home",
+      "isPlaceholder": true
+    }
+  ]
+};
+// STAR / START examples are editable descriptions, not independently verified outcome claims.
+const portfolioStarDefaults = {
+ 'ros2-mobile-robot': ['Tích hợp LiDAR lên robot với các vấn đề về hướng trục và sai lệch bản đồ.','Hiệu chuẩn vị trí LiDAR, xây dựng TF/URDF và kiểm tra LaserScan.','Đo kích thước 700 × 700 mm, kiểm tra góc quét, phân tích dữ liệu ROS bag và thử nghiệm RF2O/slam_toolbox.','Đã thu thập mẫu quét và dữ liệu hiệu chuẩn; SLAM trên robot hoàn thiện vẫn cần kiểm chứng.','Luôn đối chiếu đồng bộ thời gian, trục tọa độ và odometry trước khi tối ưu SLAM.'],
+ 'magnetic-levitation-pid': ['Nâng từ đòi hỏi điều khiển lực điện từ liên tục theo vị trí nam châm.','Đo cảm biến Hall, kiểm tra phần công suất và nghiên cứu vòng PID.','Thử nghiệm đọc Hall, INA219, PWM, MATLAB và phương án hồi tiếp.','Đã thực hiện các phép đo và thử nghiệm điều khiển; chưa đưa ra độ ổn định đạt chuẩn.','Phải hiệu chuẩn cảm biến và kiểm tra chiều phản hồi/đường đo dòng trước khi chỉnh PID.'],
+ 'esp32-smart-home': ['Cần giám sát điều kiện môi trường và điều khiển thiết bị linh hoạt.','Xây dựng logic AUTO/MANUAL, giao tiếp MQTT và hiển thị cục bộ.','Tạo topic lệnh/trạng thái, đọc DHT22 và cảm biến ánh sáng, tích hợp OLED và client MQTT.','Đã xây dựng luồng thử nghiệm truyền/nhận và logic điều khiển.','Phân tách trạng thái hệ thống, ngưỡng và lệnh điều khiển giúp kiểm tra dễ dàng.']
+};
+window.PORTFOLIO_DEFAULTS.projects.forEach(project => {
+ const star = portfolioStarDefaults[project.id];
+ if (!star) return;
+ ['situationVi','taskVi','actionVi','resultVi','reflectionVi'].forEach((field,index)=>project[field]=star[index]);
+ project.evidence = '';
+ project.photoUrl = '';
+});
+// Confirmed geometry from the robot's more recent build.
+const mobileRobot = window.PORTFOLIO_DEFAULTS.projects.find(p=>p.id==='ros2-mobile-robot');
+if (mobileRobot) {
+ mobileRobot.summaryVi = 'Tích hợp ROS 2 Humble trên Jetson Orin Nano Super, RPLIDAR A3M1 và STM32 cho robot Swerve 4 bánh; đo hình học, TF2, RF2O, SLAM và chuẩn bị Nav2.';
+ mobileRobot.summaryEn = 'ROS 2 Humble on Jetson Orin Nano Super with RPLIDAR A3M1 and STM32 for a four-wheel Swerve robot, focusing on TF2, RF2O, SLAM experiments and Nav2 preparation.';
+ mobileRobot.hardware = ['Khung 700 × 700 mm','Wheelbase 550 mm / Track 550 mm','Bánh r = 35 mm','RPLIDAR A3M1','Jetson Orin Nano Super','STM32'];
+ mobileRobot.architecture='RPLIDAR A3M1 → ROS 2 / Jetson → SLAM & Nav2 → (Vx, Vy, W) → STM32 / Swerve';
+}

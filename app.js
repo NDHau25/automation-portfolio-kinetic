@@ -13,6 +13,11 @@
   const setStorage = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } };
   const validate = obj => obj && typeof obj === 'object' && !Array.isArray(obj) && obj.profile && typeof obj.profile === 'object' && Array.isArray(obj.projects) && Array.isArray(obj.skillGroups);
   let data = validate(getStorage(STORAGE_KEY)) ? getStorage(STORAGE_KEY) : clone(defaults);
+  // Migrate existing users' local drafts without overwriting their content.
+  if (!data.extras) data.extras = clone(defaults.extras || {});
+  else if(defaults.extras) for (const key of Object.keys(defaults.extras)) {
+    if (data.extras[key] === undefined) data.extras[key] = clone(defaults.extras[key]);
+  }
   const prefs = getStorage(PREF_KEY) || {};
   let language = prefs.language === 'en' ? 'en' : 'vi';
   let theme = prefs.theme === 'light' ? 'light' : 'dark';
@@ -58,6 +63,10 @@
       timelineFallback:'Hands-on engineering work combining hardware and software.',viewProject:'VIEW DETAILS',projectLabel:'PROJECT',currentStudent:'Automation Engineering Student',savedCV:'Select “Print / Save as PDF” in your browser dialog.'
     }
   };
+  if (window.AUTO_EXT?.labels) {
+    Object.assign(translations.vi,window.AUTO_EXT.labels.vi);
+    Object.assign(translations.en,window.AUTO_EXT.labels.en);
+  }
   const tr = key => translations[language][key] || key;
   const local = (obj, stem) => String(obj?.[stem + (language === 'en' ? 'En' : 'Vi')] || obj?.[stem + 'Vi'] || '');
   const status = val => language === 'en' ? ({'Đang phát triển':'In progress','Thử nghiệm':'Experimental','Đồ án học tập':'Course project','Bài thực hành':'Lab exercise','Nguyên mẫu':'Prototype','Mô phỏng học tập':'Simulation study'}[val] || val) : val;
@@ -104,7 +113,7 @@
       ['contactLocation',p.location,'<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.7"/>']
     ].filter(([_, v]) => !!v);
     $('#contact-info').innerHTML = contactEntries.map(([key, val, path]) => `<div class="contact-info-item"><span class="contact-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">${path}</svg></span><span class="contact-info-text"><span>${escapeHTML(tr(key))}</span>${escapeHTML(val)}</span></div>`).join('') + (!p.email ? `<p style="font-size:10px;color:var(--muted)">${escapeHTML(tr('contactMissing'))}</p>` : '');
-    const socials = [['GitHub',p.github],['LinkedIn',p.linkedin],['Website',p.website]];
+    const socials = [['GitHub',p.github],['LinkedIn',p.linkedin],['Website',p.website],['Facebook',p.facebook],['YouTube',p.youtube],['Zalo',p.zalo],['TikTok',p.tiktok],['Instagram',p.instagram]];
     $('#social-links').innerHTML = socials.filter(([,url])=>safeURL(url)).map(([label,url])=> `<a class="social-link" href="${escapeHTML(safeURL(url))}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`).join('');
     document.title = `${p.name || 'Portfolio'} | Automation Engineering`;
     $('meta[name=description]').content = (local(p,'bio') || 'Automation Engineering Portfolio').slice(0,160);
@@ -131,11 +140,12 @@
     const selected = [...data.projects].slice(0,4);
     $('#timeline').innerHTML = selected.map(p=>`<div class="timeline-item"><span class="timeline-year">${escapeHTML(p.period||'—')}</span><h3>${escapeHTML(local(p,'title'))}</h3><p>${escapeHTML(local(p,'summary')||tr('timelineFallback'))}</p></div>`).join('');
   }
-  function render() { renderI18n();renderProfile();renderSkills();renderFilters();renderProjects();renderJourney(); }
+  function render() { renderI18n();renderProfile();renderSkills();renderFilters();renderProjects();renderJourney();window.AUTO_EXT?.render({data,language,escapeHTML,safeURL,local}); }
   function openProject(id) {
     const p = data.projects.find(p=>p.id===id); if (!p) return;
     const urls = [['openSource',p.github],['viewDemo',p.demo]].filter(([,u])=>safeURL(u));
     $('#project-modal-content').innerHTML = `<div class="modal-banner">${projectIcon(p.visual)}<div class="modal-banner-copy"><small>${escapeHTML(tr(p.category).toUpperCase())} / ${escapeHTML(p.period)} / ${escapeHTML(status(p.status))}</small><h2 id="modal-title">${escapeHTML(local(p,'title'))}</h2></div></div><p class="modal-description">${escapeHTML(local(p,'summary'))}</p><div class="modal-meta">${(p.tags||[]).map(tag=>`<span>${escapeHTML(tag)}</span>`).join('')}</div><div class="modal-section"><h3>${escapeHTML(tr('implementation'))}</h3><ul>${(language==='en' && p.tasksEn?.length?p.tasksEn:p.tasksVi||[]).map(t=>`<li>${escapeHTML(t)}</li>`).join('')}</ul></div><div class="modal-section"><h3>${escapeHTML(tr('equipment'))}</h3><p>${escapeHTML((p.hardware||[]).join(' · '))}</p></div><div class="modal-section"><h3>${escapeHTML(tr('architecture'))}</h3><div class="modal-architecture">${escapeHTML(p.architecture||'—')}</div></div>${urls.length?`<div class="modal-actions">${urls.map(([label,url])=>`<a class="btn btn-secondary" href="${escapeHTML(safeURL(url))}" target="_blank" rel="noopener noreferrer">${escapeHTML(tr(label))} ↗</a>`).join('')}</div>`:`<p style="color:var(--muted);font-size:11px;margin-top:25px">${escapeHTML(tr('noLinks'))}</p>`}`;
+    $('#project-modal-content').insertAdjacentHTML('beforeend',window.AUTO_EXT?.projectSTAR({project:p,language})||'');
     $('#project-modal').showModal();
   }
   function initDialogs() {
@@ -184,7 +194,7 @@
       }
     });
   }
-  function fillProfileEditor(){const form=$('#profile-form');const p=data.profile;['name','roleVi','roleEn','school','email','phone','location','github','linkedin','website','bioVi','bioEn'].forEach(key=>{form.elements.namedItem(key).value=p[key]??'';});form.elements.namedItem('available').checked=!!p.available;}
+  function fillProfileEditor(){const form=$('#profile-form');const p=data.profile;['name','roleVi','roleEn','school','email','phone','location','github','linkedin','website','facebook','youtube','zalo','tiktok','instagram','bioVi','bioEn'].forEach(key=>{form.elements.namedItem(key).value=p[key]??'';});form.elements.namedItem('available').checked=!!p.available;}
   function renderEditorProjectList(){
     $('#editor-project-list').innerHTML=data.projects.map(p=>`<div class="editor-list-row"><div><strong>${escapeHTML(p.titleVi||p.titleEn)}</strong><span>${escapeHTML(p.period)} · ${escapeHTML(tr(p.category))}</span></div><div class="editor-row-actions"><button type="button" data-edit-project="${escapeHTML(p.id)}">Sửa</button><button type="button" class="danger" data-delete-project="${escapeHTML(p.id)}">Xóa</button></div></div>`).join('') || '<p>Chưa có dự án nào.</p>';
   }
@@ -193,7 +203,7 @@
   }
   function showEditorTab(tab){$$('.editor-tab').forEach(b=>b.classList.toggle('active',b.dataset.editorTab===tab));$$('.editor-panel').forEach(p=>p.hidden=p.id!==`editor-${tab}`);if(tab==='profile')fillProfileEditor();if(tab==='projects')renderEditorProjectList();if(tab==='skills')fillSkillsEditor();}
   function projectIdForNew(){return `project-${Date.now().toString(36)}`;}
-  const projectKeys=['titleVi','titleEn','period','status','category','visual','summaryVi','summaryEn','architecture','github','demo'];
+  const projectKeys=['titleVi','titleEn','period','status','category','visual','summaryVi','summaryEn','architecture','github','demo','situationVi','taskVi','actionVi','resultVi','reflectionVi','evidence','photoUrl'];
   function openProjectEditor(project){
     const form=$('#project-editor-form');form.reset();
     form.elements.namedItem('id').value=project?.id||'';
@@ -209,7 +219,7 @@
     $$('.editor-tab').forEach(btn=>btn.addEventListener('click',()=>showEditorTab(btn.dataset.editorTab)));
     $('#profile-form').addEventListener('submit',event=>{
       event.preventDefault();const form=event.currentTarget;
-      ['name','roleVi','roleEn','school','email','phone','location','github','linkedin','website','bioVi','bioEn'].forEach(key=>data.profile[key]=form.elements.namedItem(key).value.trim());
+      ['name','roleVi','roleEn','school','email','phone','location','github','linkedin','website','facebook','youtube','zalo','tiktok','instagram','bioVi','bioEn'].forEach(key=>data.profile[key]=form.elements.namedItem(key).value.trim());
       data.profile.available=form.elements.namedItem('available').checked;
       save();
     });
@@ -245,17 +255,19 @@
     });
     $('#import-json').addEventListener('change',async event=>{
       const file=event.target.files[0];if(!file)return;
-      try{const parsed=JSON.parse(await file.text());if(!validate(parsed))throw Error('schema');data=parsed;save();showEditorTab('data');notify(tr('imported'));}
+      try{const parsed=JSON.parse(await file.text());if(!validate(parsed))throw Error('schema');if(!parsed.extras)parsed.extras=clone(defaults.extras||{});else for(const key of Object.keys(defaults.extras||{})){if(parsed.extras[key]===undefined)parsed.extras[key]=clone(defaults.extras[key]);}data=parsed;save();showEditorTab('data');notify(tr('imported'));}
       catch{notify(tr('invalidImport'));}
       event.target.value='';
     });
     $('#reset-data').addEventListener('click',()=>{if(confirm(tr('confirmReset'))){data=clone(defaults);save();showEditorTab('data');notify(tr('resetDone'));}});
   }
   function renderCV(){
-    const p=data.profile;
-    const contact=[p.email,p.phone,p.location,p.github,p.linkedin].filter(Boolean).map(escapeHTML).join(' | ');
-    $('#cv-sheet').innerHTML=`<header class="cv-header"><h1>${escapeHTML(p.name)}</h1><div class="cv-role">${escapeHTML(local(p,'role'))}</div><div class="cv-contact">${contact}</div></header><section class="cv-section"><h2>${language==='vi'?'Giới thiệu':'Profile'}</h2><p>${escapeHTML(local(p,'bio'))}</p></section><section class="cv-section"><h2>${language==='vi'?'Học vấn':'Education'}</h2><p><strong>${escapeHTML(p.school)}</strong> — ${escapeHTML(local(p,'role'))}</p></section><section class="cv-section"><h2>${language==='vi'?'Kỹ năng kỹ thuật':'Technical Skills'}</h2><div class="cv-skills">${data.skillGroups.map(g=>`<div><b>${escapeHTML(local(g,'name'))}</b><span>${escapeHTML((g.skills||[]).join(' · '))}</span></div>`).join('')}</div></section><section class="cv-section"><h2>${language==='vi'?'Dự án tiêu biểu':'Selected Projects'}</h2>${data.projects.slice(0,5).map(p=>`<div class="cv-project"><div class="cv-project-head"><strong>${escapeHTML(local(p,'title'))}</strong><span class="cv-muted">${escapeHTML(p.period)}</span></div><p>${escapeHTML(local(p,'summary'))}</p><div class="cv-tags">${escapeHTML((p.tags||[]).join(' · '))}</div></div>`).join('')}</section>`;
+    const paper=window.AUTO_EXT?.createCV({data,language,preview:false});
+    if (paper) {$('#cv-sheet').innerHTML=paper;return;}
+    $('#cv-sheet').textContent=local(data.profile,'bio');
   }
   $('#hero-cv').addEventListener('click',()=>{renderCV();notify(tr('savedCV'));window.print();});
-  initNav();initProjects();initDialogs();initContact();initEditor();render();
+  initNav();initProjects();initDialogs();initContact();initEditor();
+  window.AUTO_EXT?.init({getData:()=>data,getLanguage:()=>language,save,notify,renderCV,openProject});
+  render();
 })();
