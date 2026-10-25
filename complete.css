@@ -41,3 +41,17 @@
 .profile-portrait{width:115px;height:115px;border:2px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:17px;box-shadow:0 6px 30px rgba(0,0,0,.1)}.profile-portrait img{width:100%;height:100%;object-fit:cover}
 
 .cv-draft-label{font:700 8px Arial,sans-serif;letter-spacing:.08em;text-align:right;color:#9d6f25;padding:7px 0}.cv-paper .cv-section .cv-placeholder{color:#a5702a!important;font-style:italic}
+
+/* GitHub sync panel inside the editor's backup tab */
+.gh-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px}
+.gh-fields label{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.gh-fields .wide{grid-column:1/-1}
+.gh-fields input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:11px 12px;color:var(--ink);font-size:12px;outline:0;font-family:inherit}
+.gh-fields input:focus{border-color:var(--accent)}
+.gh-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.gh-actions .btn:disabled{opacity:.55;cursor:wait}
+.gh-status{font-size:11px;line-height:1.7;margin-top:11px;min-height:1em}
+.gh-help{font-size:10.5px;line-height:1.7;color:var(--muted);margin-top:9px}
+.gh-help a{color:var(--accent)}
+.backup-actions code{font-family:Consolas,monospace;font-size:10.5px;color:var(--accent)}
+@media (max-width:640px){.gh-fields{grid-template-columns:1fr}}

@@ -69,7 +69,7 @@ Tài liệu khuyến nghị CV rõ ràng, dễ đọc, thường **1 trang với
 
 Trang tĩnh HTML/CSS/JavaScript, không cần backend hay tài khoản. Có chuyển Việt/Anh, tối/sáng, bộ lọc dự án, tìm kiếm, quản trị nội dung phía trình duyệt, hiển thị media theo URL, xuất/nhập JSON và xuất cấu hình JS để deploy. Liên hệ bằng `mailto:`; không tự gửi email. Không hỗ trợ upload tệp lên máy chủ, lưu chứng chỉ riêng tư hay phân quyền người dùng.
 
-`localStorage` chỉ lưu nội dung trên trình duyệt hiện tại; nếu xóa dữ liệu trình duyệt, nội dung tùy chỉnh có thể mất nếu chưa sao lưu. Tệp `data.js` là thông tin **công khai** khi website được triển khai; không đưa dữ liệu nhạy cảm, mật khẩu hay mã API vào đây.
+`localStorage` lưu nội dung chỉnh sửa trên trình duyệt hiện tại. Tab **Sao lưu** trong trình chỉnh sửa có mục **Đồng bộ GitHub**: dán fine-grained token (quyền `Contents: Read and write`) rồi bấm **Lưu lên GitHub** để ghi nội dung vào tệp `data.json` trong repo — trang web công khai cập nhật sau ~1 phút và các thiết bị khác tự tải bản mới nhất khi mở trang (bấm **Tải bản từ GitHub** để kéo thủ công). Token chỉ lưu trong localStorage của máy bạn, không nằm trong mã nguồn. Nếu xóa dữ liệu trình duyệt trước khi đồng bộ, nội dung tùy chỉnh có thể mất; hãy xuất JSON sao lưu định kỳ. Tệp `data.js` là thông tin **công khai** khi website được triển khai; không đưa dữ liệu nhạy cảm, mật khẩu hay mã API vào đây.
 
 ## Mã nguồn
 

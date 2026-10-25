@@ -1,5 +1,6 @@
 /* Edit the defaults below to personalize the deployed website.
-   Visitors' editor changes are stored only in that browser's localStorage. */
+   Editor changes are stored in the browser's localStorage; use the editor's
+   "Backup" tab to publish them to data.json in this repo via the GitHub API. */
 window.PORTFOLIO_DEFAULTS = {
   profile: {
     name: 'Tên của bạn',

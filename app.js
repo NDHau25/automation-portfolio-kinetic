@@ -1,6 +1,9 @@
 'use strict';
 (() => {
   const STORAGE_KEY = 'autodev_portfolio_content_v1';
+  const META_KEY = 'autodev_portfolio_content_meta_v1';
+  const GH_KEY = 'autodev_portfolio_github_v1';
+  const GH_REPO_DEFAULT = 'NDHau25/automation-portfolio-kinetic';
   const PREF_KEY = 'autodev_portfolio_preferences_v1';
   const defaults = window.PORTFOLIO_DEFAULTS;
   if (!defaults) return;
@@ -12,7 +15,14 @@
   const getStorage = key => { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } };
   const setStorage = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } };
   const validate = obj => obj && typeof obj === 'object' && !Array.isArray(obj) && obj.profile && typeof obj.profile === 'object' && Array.isArray(obj.projects) && Array.isArray(obj.skillGroups);
-  let data = validate(getStorage(STORAGE_KEY)) ? getStorage(STORAGE_KEY) : clone(defaults);
+  const storedDraft = getStorage(STORAGE_KEY);
+  const hasLocalDraft = validate(storedDraft);
+  let data = hasLocalDraft ? storedDraft : clone(defaults);
+  let meta = getStorage(META_KEY) || {};
+  // Drafts saved before timestamps existed win until a newer GitHub publish arrives;
+  // brand-new visitors keep savedAt = 0 so the published data.json applies.
+  if (!Number.isFinite(meta.savedAt)) meta.savedAt = hasLocalDraft ? Date.now() : 0;
+  let gh = getStorage(GH_KEY) || {};
   // Migrate existing users' local drafts without overwriting their content.
   if (!data.extras) data.extras = clone(defaults.extras || {});
   else if(defaults.extras) for (const key of Object.keys(defaults.extras)) {
@@ -42,7 +52,8 @@
       contactEmail:'EMAIL',contactPhone:'ĐIỆN THOẠI',contactLocation:'ĐỊA ĐIỂM',contactMissing:'Chưa thiết lập email liên hệ. Chọn “Chỉnh sửa” để thêm.',
       invalidContact:'Vui lòng điền đúng họ tên, email, chủ đề và nội dung ít nhất 10 ký tự.',copied:'Đã sao chép nội dung lời nhắn. Hãy bổ sung email nhận trong Chỉnh sửa.',emailReady:'Ứng dụng email đã được gọi. Nếu chưa mở, hãy kiểm tra ứng dụng email mặc định.',copyFailed:'Không sao chép được. Hãy thiết lập email ở phần Chỉnh sửa.',
       saved:'Đã lưu thay đổi trên trình duyệt này.',saveFailed:'Không lưu được, có thể trình duyệt chặn localStorage.',projectDeleted:'Đã xóa dự án.',exported:'Đã xuất dữ liệu JSON.',imported:'Đã nhập dữ liệu thành công.',invalidImport:'Tệp JSON không hợp lệ hoặc thiếu dữ liệu portfolio.',resetDone:'Đã khôi phục dữ liệu mẫu.',confirmDelete:'Xóa dự án này?',confirmReset:'Đặt lại toàn bộ nội dung về dữ liệu mẫu? Những thay đổi chưa xuất sẽ bị mất.',
-      timelineFallback:'Dự án thực hành tích hợp phần cứng và phần mềm.',viewProject:'XEM CHI TIẾT',projectLabel:'PROJECT',currentStudent:'Sinh viên Kỹ thuật Tự động hóa',savedCV:'Chọn “In / Save as PDF” trong hộp thoại trình duyệt.'
+      timelineFallback:'Dự án thực hành tích hợp phần cứng và phần mềm.',viewProject:'XEM CHI TIẾT',projectLabel:'PROJECT',currentStudent:'Sinh viên Kỹ thuật Tự động hóa',savedCV:'Chọn “In / Save as PDF” trong hộp thoại trình duyệt.',
+      syncedFromGitHub:'Đã tải nội dung mới nhất từ GitHub.',publishedGitHub:'Đã lưu lên GitHub ✓. Trang web cập nhật sau ~1 phút.',publishFailed:'Không lưu lên GitHub được — kiểm tra token, repo và quyền Contents.',pulledGitHub:'Đã tải bản lưu từ GitHub vào trang này.',pullEmpty:'Chưa có bản lưu data.json trên GitHub.',pullFailed:'Không tải được data.json từ GitHub.',confirmPullOlder:'Bản lưu trên trình duyệt này mới hơn bản trên GitHub. Tải xuống sẽ mất các thay đổi mới hơn — tiếp tục?'
     },
     en: {
       navAbout:'About',navSkills:'Skills',navProjects:'Projects',navJourney:'Journey',navContact:'Contact',edit:'Edit',
@@ -60,7 +71,8 @@
       contactEmail:'EMAIL',contactPhone:'PHONE',contactLocation:'LOCATION',contactMissing:'Contact email not set. Use “Edit” to add yours.',
       invalidContact:'Please enter your name, valid email, subject and a message of at least 10 characters.',copied:'Message copied. Add a destination email in the editor.',emailReady:'Your mail app was requested. Check your default email client if it did not open.',copyFailed:'Could not copy. Please configure the contact email in Edit.',
       saved:'Changes saved in this browser.',saveFailed:'Could not save. Browser storage may be unavailable.',projectDeleted:'Project deleted.',exported:'JSON backup exported.',imported:'Portfolio data imported.',invalidImport:'Invalid JSON or missing portfolio data.',resetDone:'Sample data restored.',confirmDelete:'Delete this project?',confirmReset:'Reset all data to the sample? Unsaved changes not exported to JSON will be lost.',
-      timelineFallback:'Hands-on engineering work combining hardware and software.',viewProject:'VIEW DETAILS',projectLabel:'PROJECT',currentStudent:'Automation Engineering Student',savedCV:'Select “Print / Save as PDF” in your browser dialog.'
+      timelineFallback:'Hands-on engineering work combining hardware and software.',viewProject:'VIEW DETAILS',projectLabel:'PROJECT',currentStudent:'Automation Engineering Student',savedCV:'Select “Print / Save as PDF” in your browser dialog.',
+      syncedFromGitHub:'Loaded the newest content from GitHub.',publishedGitHub:'Saved to GitHub ✓. The live site updates in ~1 minute.',publishFailed:'Could not save to GitHub — check the token, repo and Contents permission.',pulledGitHub:'Loaded the GitHub backup into this page.',pullEmpty:'No data.json backup on GitHub yet.',pullFailed:'Could not load data.json from GitHub.',confirmPullOlder:'This browser has newer changes than GitHub. Pulling will lose them — continue?'
     }
   };
   if (window.AUTO_EXT?.labels) {
@@ -85,7 +97,7 @@
     const el = $('#toast'); el.textContent = message; el.classList.add('visible');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('visible'), 3200);
   }
-  function save() { if (!setStorage(STORAGE_KEY, data)) notify(tr('saveFailed')); else notify(tr('saved')); render(); }
+  function save() { meta.savedAt = Date.now(); const stored = setStorage(STORAGE_KEY, data) && setStorage(META_KEY, meta); if (!stored) notify(tr('saveFailed')); else notify(tr('saved')); render(); }
   function renderI18n() {
     document.documentElement.lang = language;
     $$('[data-i18n]').forEach(el => { el.textContent = tr(el.dataset.i18n); });
@@ -201,7 +213,7 @@
   function fillSkillsEditor(){
     $('#skills-editor-fields').innerHTML=data.skillGroups.map((g,i)=>`<label class="wide">${escapeHTML(local(g,'name'))}<textarea rows="3" data-skill-index="${i}">${escapeHTML((g.skills||[]).join(', '))}</textarea></label>`).join('');
   }
-  function showEditorTab(tab){$$('.editor-tab').forEach(b=>b.classList.toggle('active',b.dataset.editorTab===tab));$$('.editor-panel').forEach(p=>p.hidden=p.id!==`editor-${tab}`);if(tab==='profile')fillProfileEditor();if(tab==='projects')renderEditorProjectList();if(tab==='skills')fillSkillsEditor();}
+  function showEditorTab(tab){$$('.editor-tab').forEach(b=>b.classList.toggle('active',b.dataset.editorTab===tab));$$('.editor-panel').forEach(p=>p.hidden=p.id!==`editor-${tab}`);if(tab==='profile')fillProfileEditor();if(tab==='projects')renderEditorProjectList();if(tab==='skills')fillSkillsEditor();if(tab==='data')fillGitHubSync();}
   function projectIdForNew(){return `project-${Date.now().toString(36)}`;}
   const projectKeys=['titleVi','titleEn','period','status','category','visual','summaryVi','summaryEn','architecture','github','demo','situationVi','taskVi','actionVi','resultVi','reflectionVi','evidence','photoUrl'];
   function openProjectEditor(project){
@@ -261,13 +273,133 @@
     });
     $('#reset-data').addEventListener('click',()=>{if(confirm(tr('confirmReset'))){data=clone(defaults);save();showEditorTab('data');notify(tr('resetDone'));}});
   }
+  function fillGitHubSync(){
+    $('#gh-token').value = gh.token || '';
+    $('#gh-repo').value = gh.repo || GH_REPO_DEFAULT;
+    $('#gh-branch').value = gh.branch || 'main';
+    $('#gh-status').textContent = gh.lastPublish ? `Bản lưu gần nhất trên GitHub: ${new Date(gh.lastPublish).toLocaleString('vi-VN')}` : 'Chưa lưu lên GitHub lần nào.';
+  }
+  const utf8ToBase64 = str => {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(binary);
+  };
+  async function ghRequest(path, token, options = {}) {
+    return fetch(`https://api.github.com${path}`, { ...options, headers: { Accept: 'application/vnd.github+json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) } });
+  }
+  async function fetchRemoteData(repo, branch, token) {
+    // Token holders read through the Contents API: always fresh, no CDN lag.
+    if (token) {
+      try {
+        const res = await ghRequest(`/repos/${repo}/contents/data.json?ref=${encodeURIComponent(branch)}`, token);
+        if (res.ok) {
+          const json = await res.json();
+          const decoded = new TextDecoder().decode(Uint8Array.from(atob(json.content.replace(/\n/g, '')), c => c.charCodeAt(0)));
+          return JSON.parse(decoded);
+        }
+        if (res.status === 404) return null;
+      } catch { /* fall back to raw below */ }
+    }
+    const res = await fetch(`https://raw.githubusercontent.com/${repo}/${encodeURIComponent(branch)}/data.json?ts=${Date.now()}`, { cache: 'no-store' });
+    if (res.status === 404) return null;
+    if (!res.ok) throw Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+  function applyRemoteData(remote) {
+    if (!validate(remote?.content)) throw Error('schema');
+    data = remote.content;
+    if (!data.extras) data.extras = clone(defaults.extras || {});
+    else if (defaults.extras) for (const key of Object.keys(defaults.extras)) { if (data.extras[key] === undefined) data.extras[key] = clone(defaults.extras[key]); }
+    meta.savedAt = remote.savedAt || 0;
+    setStorage(STORAGE_KEY, data);
+    setStorage(META_KEY, meta);
+    render();
+  }
+  function readGitHubForm() {
+    return {
+      token: $('#gh-token').value.trim(),
+      repo: ($('#gh-repo').value.trim() || GH_REPO_DEFAULT).replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '').replace(/\/+$/, ''),
+      branch: $('#gh-branch').value.trim() || 'main'
+    };
+  }
+  async function publishToGitHub() {
+    const { token, repo, branch } = readGitHubForm();
+    const status = $('#gh-status');
+    const publishBtn = $('#gh-publish');
+    if (!/^[\w-]{20,}$/.test(token)) { status.textContent = '⚠ Token chưa hợp lệ. Cần fine-grained token với quyền Contents: Read and write cho repo này.'; return; }
+    status.textContent = 'Đang lưu lên GitHub…';
+    publishBtn.disabled = true;
+    try {
+      const savedAt = Date.now();
+      const payload = JSON.stringify({ savedAt, content: data }, null, 2);
+      for (let attempt = 0; attempt < 2; attempt++) {
+        let sha;
+        const head = await ghRequest(`/repos/${repo}/contents/data.json?ref=${encodeURIComponent(branch)}`, token);
+        const headJson = await head.json().catch(() => null);
+        if (head.ok) sha = headJson.sha;
+        else if (head.status !== 404) throw Error(headJson?.message || `HTTP ${head.status}`);
+        const body = { message: 'Update portfolio content from web editor', branch, content: utf8ToBase64(payload) };
+        if (sha) body.sha = sha;
+        const put = await ghRequest(`/repos/${repo}/contents/data.json`, token, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        if (put.ok) break;
+        if (put.status === 409 && attempt === 0) continue; // data.json moved meanwhile; retry with the fresh sha
+        const putJson = await put.json().catch(() => null);
+        throw Error(putJson?.message || `HTTP ${put.status}`);
+      }
+      meta.savedAt = savedAt;
+      gh = { token, repo, branch, lastPublish: savedAt };
+      setStorage(META_KEY, meta);
+      setStorage(GH_KEY, gh);
+      status.textContent = `✓ Đã lưu lên GitHub lúc ${new Date(savedAt).toLocaleTimeString('vi-VN')} — trang web cập nhật sau ~1 phút.`;
+      notify(tr('publishedGitHub'));
+    } catch (err) {
+      status.textContent = `⚠ ${err.message || 'Lỗi mạng'} — kiểm tra token, repo và quyền Contents (Read and write).`;
+      notify(tr('publishFailed'));
+    } finally {
+      publishBtn.disabled = false;
+    }
+  }
+  async function pullFromGitHub() {
+    const { token, repo, branch } = readGitHubForm();
+    const status = $('#gh-status');
+    status.textContent = 'Đang tải bản lưu từ GitHub…';
+    try {
+      const remote = await fetchRemoteData(repo, branch, token);
+      if (!remote) { status.textContent = `Chưa có data.json trong ${repo}@${branch}. Hãy bấm “Lưu lên GitHub” trước.`; notify(tr('pullEmpty')); return; }
+      if ((meta.savedAt || 0) > (remote.savedAt || 0) && !confirm(tr('confirmPullOlder'))) { status.textContent = 'Đã hủy tải xuống.'; return; }
+      applyRemoteData(remote);
+      status.textContent = `✓ Đã tải bản lưu ${new Date(remote.savedAt || Date.now()).toLocaleString('vi-VN')} vào trang.`;
+      notify(tr('pulledGitHub'));
+    } catch {
+      status.textContent = '⚠ Không tải được data.json từ GitHub.';
+      notify(tr('pullFailed'));
+    }
+  }
+  function initGitHubSync() {
+    $('#gh-publish').addEventListener('click', publishToGitHub);
+    $('#gh-pull').addEventListener('click', pullFromGitHub);
+    $('#gh-forget').addEventListener('click', () => {
+      gh = { repo: gh.repo, branch: gh.branch };
+      setStorage(GH_KEY, gh);
+      $('#gh-token').value = '';
+      $('#gh-status').textContent = 'Đã xóa token khỏi trình duyệt này.';
+    });
+    // Pull the published data.json on load so every device starts from the newest content.
+    (async () => {
+      try {
+        const remote = await fetchRemoteData(gh.repo || GH_REPO_DEFAULT, gh.branch || 'main', gh.token);
+        if (remote && Number(remote.savedAt || 0) > (meta.savedAt || 0)) { applyRemoteData(remote); notify(tr('syncedFromGitHub')); }
+      } catch { /* offline or rate-limited: the local copy still renders */ }
+    })();
+  }
   function renderCV(){
     const paper=window.AUTO_EXT?.createCV({data,language,preview:false});
     if (paper) {$('#cv-sheet').innerHTML=paper;return;}
     $('#cv-sheet').textContent=local(data.profile,'bio');
   }
   $('#hero-cv').addEventListener('click',()=>{renderCV();notify(tr('savedCV'));window.print();});
-  initNav();initProjects();initDialogs();initContact();initEditor();
+  initNav();initProjects();initDialogs();initContact();initEditor();initGitHubSync();
   window.AUTO_EXT?.init({getData:()=>data,getLanguage:()=>language,save,notify,renderCV,openProject});
   render();
 })();
