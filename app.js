@@ -9,18 +9,29 @@
   const defaults = window.PORTFOLIO_DEFAULTS;
   if (!defaults) return;
   // Admin mode: the deployed site is read-only. The owner unlocks editing on a browser
-  // by visiting ?admin=<PORTFOLIO_ADMIN_KEY> once (flag kept in localStorage); a locally
-  // served copy is always admin. Publishing still requires the GitHub token.
+  // by visiting ?admin=<PORTFOLIO_ADMIN_KEY> (flag kept in localStorage); a locally
+  // served copy is always admin. With PORTFOLIO_OAUTH_CLIENT_ID set, the key only opens
+  // a GitHub device-flow login gate — only the repo owner's account unlocks editing.
+  // Publishing still requires the GitHub token.
   const adminQuery = new URLSearchParams(location.search);
   const ownerPreview = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
-  if (window.PORTFOLIO_ADMIN_KEY && adminQuery.get('admin') === window.PORTFOLIO_ADMIN_KEY) {
-    try { localStorage.setItem(ADMIN_FLAG, '1'); } catch { /* storage blocked */ }
+  const ADMIN_KEY = window.PORTFOLIO_ADMIN_KEY || '';
+  const OWNER_LOGIN = GH_REPO_DEFAULT.split('/')[0];
+  let isAdmin = ownerPreview;
+  try { isAdmin = isAdmin || localStorage.getItem(ADMIN_FLAG) === '1'; } catch { /* storage blocked */ }
+  if (ADMIN_KEY && adminQuery.get('admin') === ADMIN_KEY) {
     adminQuery.delete('admin');
     const restQuery = adminQuery.toString();
     history.replaceState(null, '', location.pathname + (restQuery ? `?${restQuery}` : '') + location.hash);
+    if (!ownerPreview && !isAdmin) {
+      // The key only opens the door: editing unlocks after GitHub verifies the
+      // token belongs to the repo owner's account (api.github.com is CORS-safe).
+      grantAdminViaToken();
+    } else {
+      try { localStorage.setItem(ADMIN_FLAG, '1'); } catch { /* storage blocked */ }
+      isAdmin = true;
+    }
   }
-  let isAdmin = ownerPreview;
-  try { isAdmin = isAdmin || localStorage.getItem(ADMIN_FLAG) === '1'; } catch { /* storage blocked */ }
   if (isAdmin) document.body.dataset.admin = '1';
   const clone = obj => JSON.parse(JSON.stringify(obj));
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -111,6 +122,40 @@
   function notify(message) {
     const el = $('#toast'); el.textContent = message; el.classList.add('visible');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('visible'), 3200);
+  }
+  function grantAdminViaToken() {
+    $('#gate-owner').textContent = OWNER_LOGIN;
+    $('#gate-status').textContent = '';
+    $('#gate-token').value = '';
+    $('#gate-modal').showModal();
+    $('#gate-token').focus();
+  }
+  async function verifyOwnerToken() {
+    const token = $('#gate-token').value.trim();
+    const status = $('#gate-status');
+    if (!/^[\w-]{20,}$/.test(token)) { status.textContent = '⚠ Token chưa hợp lệ (cần fine-grained token đủ dài).'; return; }
+    status.textContent = 'Đang xác minh với GitHub…';
+    try {
+      const res = await ghRequest('/user', token);
+      const user = await res.json().catch(() => ({}));
+      if (res.ok && user.login === OWNER_LOGIN) {
+        gh = { token, repo: gh.repo || GH_REPO_DEFAULT, branch: gh.branch || 'main' };
+        setStorage(GH_KEY, gh);
+        try { localStorage.setItem(ADMIN_FLAG, '1'); } catch { /* storage blocked */ }
+        isAdmin = true;
+        document.body.dataset.admin = '1';
+        const exitBtn = $('#exit-admin'); if (exitBtn) exitBtn.hidden = false;
+        status.textContent = `✓ Xin chào ${user.login} — đã mở khóa chế độ quản trị.`;
+        notify(`Đã mở khóa quản trị với tài khoản GitHub ${user.login}.`);
+        setTimeout(() => { const d = $('#gate-modal'); if (d.open) d.close(); }, 1400);
+      } else if (res.ok) {
+        status.textContent = `✕ Token này thuộc tài khoản “${user.login}” — không phải chủ sở hữu ${OWNER_LOGIN}.`;
+      } else {
+        status.textContent = `⚠ GitHub từ chối token (HTTP ${res.status}). Kiểm tra lại token.`;
+      }
+    } catch {
+      status.textContent = '⚠ Không kết nối được GitHub. Kiểm tra mạng rồi thử lại.';
+    }
   }
   function save() { meta.savedAt = Date.now(); const stored = setStorage(STORAGE_KEY, data) && setStorage(META_KEY, meta); if (!stored) notify(tr('saveFailed')); else notify(tr('saved')); render(); }
   function renderI18n() {
@@ -251,6 +296,8 @@
       $('#editor-modal').close();
       notify('Đã thoát chế độ quản trị. Dùng link bí mật ?admin=… để mở lại.');
     });
+    $('#gate-verify').addEventListener('click', verifyOwnerToken);
+    $('#gate-token').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); verifyOwnerToken(); } });
     $('#profile-form').addEventListener('submit',event=>{
       event.preventDefault();const form=event.currentTarget;
       ['name','roleVi','roleEn','school','email','phone','location','github','linkedin','website','facebook','youtube','zalo','tiktok','instagram','bioVi','bioEn'].forEach(key=>data.profile[key]=form.elements.namedItem(key).value.trim());
