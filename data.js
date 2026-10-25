@@ -1,6 +1,13 @@
 /* Edit the defaults below to personalize the deployed website.
    Editor changes are stored in the browser's localStorage; use the editor's
    "Backup" tab to publish them to data.json in this repo via the GitHub API. */
+
+/* Admin key: visit the site once with ?admin=<this value> to unlock the editor on
+   that browser (the public page hides every edit button). Change it to your own
+   secret value. It ships with the static source, so the GitHub token remains the
+   real protection for publishing changes. */
+window.PORTFOLIO_ADMIN_KEY = 'hau-2026-8fK29xQf';
+
 window.PORTFOLIO_DEFAULTS = {
   profile: {
     name: 'Tên của bạn',

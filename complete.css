@@ -55,3 +55,11 @@
 .gh-help a{color:var(--accent)}
 .backup-actions code{font-family:Consolas,monospace;font-size:10.5px;color:var(--accent)}
 @media (max-width:640px){.gh-fields{grid-template-columns:1fr}}
+
+/* Read-only public mode: editing entry points appear only in admin mode (body[data-admin]) */
+body:not([data-admin]) #open-editor,
+body:not([data-admin]) .link-edit-content,
+body:not([data-admin]) #cv-edit-extra,
+body:not([data-admin]) #cv-progress,
+body:not([data-admin]) #cv-checklist{display:none!important}
+#exit-admin{margin-top:12px}

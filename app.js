@@ -3,10 +3,25 @@
   const STORAGE_KEY = 'autodev_portfolio_content_v1';
   const META_KEY = 'autodev_portfolio_content_meta_v1';
   const GH_KEY = 'autodev_portfolio_github_v1';
+  const ADMIN_FLAG = 'autodev_admin_mode_v1';
   const GH_REPO_DEFAULT = 'NDHau25/automation-portfolio-kinetic';
   const PREF_KEY = 'autodev_portfolio_preferences_v1';
   const defaults = window.PORTFOLIO_DEFAULTS;
   if (!defaults) return;
+  // Admin mode: the deployed site is read-only. The owner unlocks editing on a browser
+  // by visiting ?admin=<PORTFOLIO_ADMIN_KEY> once (flag kept in localStorage); a locally
+  // served copy is always admin. Publishing still requires the GitHub token.
+  const adminQuery = new URLSearchParams(location.search);
+  const ownerPreview = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
+  if (window.PORTFOLIO_ADMIN_KEY && adminQuery.get('admin') === window.PORTFOLIO_ADMIN_KEY) {
+    try { localStorage.setItem(ADMIN_FLAG, '1'); } catch { /* storage blocked */ }
+    adminQuery.delete('admin');
+    const restQuery = adminQuery.toString();
+    history.replaceState(null, '', location.pathname + (restQuery ? `?${restQuery}` : '') + location.hash);
+  }
+  let isAdmin = ownerPreview;
+  try { isAdmin = isAdmin || localStorage.getItem(ADMIN_FLAG) === '1'; } catch { /* storage blocked */ }
+  if (isAdmin) document.body.dataset.admin = '1';
   const clone = obj => JSON.parse(JSON.stringify(obj));
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -229,6 +244,13 @@
   function initEditor(){
     $('#open-editor').addEventListener('click',()=>{showEditorTab('profile');$('#editor-modal').showModal();});
     $$('.editor-tab').forEach(btn=>btn.addEventListener('click',()=>showEditorTab(btn.dataset.editorTab)));
+    if (isAdmin) $('#exit-admin').hidden = false;
+    $('#exit-admin').addEventListener('click',()=>{
+      try { localStorage.removeItem(ADMIN_FLAG); } catch { /* storage blocked */ }
+      delete document.body.dataset.admin;
+      $('#editor-modal').close();
+      notify('Đã thoát chế độ quản trị. Dùng link bí mật ?admin=… để mở lại.');
+    });
     $('#profile-form').addEventListener('submit',event=>{
       event.preventDefault();const form=event.currentTarget;
       ['name','roleVi','roleEn','school','email','phone','location','github','linkedin','website','facebook','youtube','zalo','tiktok','instagram','bioVi','bioEn'].forEach(key=>data.profile[key]=form.elements.namedItem(key).value.trim());
