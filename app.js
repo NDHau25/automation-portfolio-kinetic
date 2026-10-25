@@ -18,6 +18,7 @@
   const ADMIN_KEY = window.PORTFOLIO_ADMIN_KEY || '';
   const OWNER_LOGIN = GH_REPO_DEFAULT.split('/')[0];
   let isAdmin = ownerPreview;
+  let pendingOwnerGate = false;
   try { isAdmin = isAdmin || localStorage.getItem(ADMIN_FLAG) === '1'; } catch { /* storage blocked */ }
   if (ADMIN_KEY && adminQuery.get('admin') === ADMIN_KEY) {
     adminQuery.delete('admin');
@@ -26,7 +27,8 @@
     if (!ownerPreview && !isAdmin) {
       // The key only opens the door: editing unlocks after GitHub verifies the
       // token belongs to the repo owner's account (api.github.com is CORS-safe).
-      grantAdminViaToken();
+      // The gate opens after init so DOM helpers are ready.
+      pendingOwnerGate = true;
     } else {
       try { localStorage.setItem(ADMIN_FLAG, '1'); } catch { /* storage blocked */ }
       isAdmin = true;
@@ -471,4 +473,5 @@
   initNav();initProjects();initDialogs();initContact();initEditor();initGitHubSync();
   window.AUTO_EXT?.init({getData:()=>data,getLanguage:()=>language,save,notify,renderCV,openProject});
   render();
+  if (pendingOwnerGate) grantAdminViaToken();
 })();
