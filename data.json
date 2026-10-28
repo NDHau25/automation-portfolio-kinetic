@@ -1,5 +1,5 @@
 {
-  "savedAt": 1792920079437,
+  "savedAt": 1793190095033,
   "content": {
     "profile": {
       "name": "Nguyễn Đình Hậu",
@@ -461,7 +461,16 @@
           "evidence": "https://www.coursera.org/account/accomplishments/certificate/IRN2ALOUFO8W"
         }
       ],
-      "experiences": [],
+      "experiences": [
+        {
+          "id": "item-mvs1m90h",
+          "title": "Sinh viên nghiên cứu & phát triển Robot tự hành (Robotics R&D)",
+          "organization": "Dự án nghiên cứu và đồ án cá nhân – Ngành Kỹ thuật Tự động hóa",
+          "period": "2026",
+          "description": "Nghiên cứu, thiết kế và phát triển các hệ thống điều khiển tự động và robot di động. Lập trình STM32, ESP32 bằng C/C++; tích hợp cảm biến, động cơ, giao tiếp CAN, UART và micro-ROS. Xây dựng robot Swerve 4 bánh sử dụng ROS 2 Humble, RPLIDAR A3M1, SLAM Toolbox, RF2O Odometry và Nav2 để lập bản đồ, định vị và điều hướng tự động. Thực hiện cấu hình, hiệu chuẩn, kiểm thử hệ thống và phân tích dữ liệu bằng Python, MATLAB/Simulink. Có kinh nghiệm xử lý lỗi phần cứng, phần mềm và tối ưu thuật toán điều khiển thông qua các dự án thực tế.",
+          "evidence": ""
+        }
+      ],
       "awards": [],
       "activities": [],
       "hobbies": [
