@@ -1,22 +1,17 @@
 {
-  "savedAt": 1793190095033,
+  "savedAt": 1793200157089,
   "content": {
     "profile": {
       "name": "Nguyễn Đình Hậu",
       "roleVi": "Sinh viên Kỹ thuật Tự động hóa",
       "roleEn": "Automation Engineering Student",
       "school": "Trường Đại Học Lạc Hồng / Khoa Cơ Điện - Điện Tử",
-      "email": "",
+      "email": "nguyendinhhau6625@gmail.com",
       "phone": "0363009846",
       "location": "Việt Nam",
-      "github": "https://github.com/NDHau25/automation-portfolio-kinetic",
+      "github": "https://github.com/settings/profile",
       "linkedin": "",
       "website": "",
-      "facebook": "",
-      "youtube": "",
-      "zalo": "",
-      "tiktok": "",
-      "instagram": "",
       "available": true,
       "bioVi": "Tôi là sinh viên ngành Kỹ thuật Tự động hóa, quan tâm đến hệ thống nhúng, robot, lý thuyết điều khiển và truyền thông công nghiệp. Tôi thích kết nối cảm biến, vi điều khiển và phần mềm để tạo nên các nguyên mẫu có thể đo lường và kiểm chứng.",
       "bioEn": "I am an Automation Engineering student interested in embedded systems, robotics, control theory, and industrial communication. I enjoy bringing sensors, controllers and software together to build measurable, testable prototypes."
@@ -89,8 +84,8 @@
         "status": "Đang phát triển",
         "titleVi": "Robot tự hành 4 bánh với ROS 2",
         "titleEn": "ROS 2 Four-Wheel Mobile Robot",
-        "summaryVi": "Tích hợp ROS 2 Humble trên Jetson Orin Nano Super, RPLIDAR A3M1 và STM32 cho robot Swerve 4 bánh; đo hình học, TF2, RF2O, SLAM và chuẩn bị Nav2.",
-        "summaryEn": "ROS 2 Humble on Jetson Orin Nano Super with RPLIDAR A3M1 and STM32 for a four-wheel Swerve robot, focusing on TF2, RF2O, SLAM experiments and Nav2 preparation.",
+        "summaryVi": "Xây dựng robot bốn bánh thường, tích hợp Jetson Nano, STM32 và LiDAR để phát triển URDF, TF2, odometry và SLAM trên ROS 2 Humble.",
+        "summaryEn": "Building a four-wheel mobile robot with Jetson Nano, STM32 and LiDAR, focusing on URDF, TF2, odometry and SLAM in ROS 2 Humble.",
         "tags": [
           "ROS 2 Humble",
           "Jetson Nano",
@@ -100,11 +95,10 @@
           "TF2"
         ],
         "hardware": [
-          "Khung 700 × 700 mm",
-          "Wheelbase 550 mm / Track 550 mm",
-          "Bánh r = 35 mm",
-          "RPLIDAR A3M1",
-          "Jetson Orin Nano Super",
+          "Khung robot 720 × 720 mm",
+          "4 bánh thường",
+          "Slamtec RPLIDAR A3M1",
+          "Jetson Nano",
           "STM32"
         ],
         "tasksVi": [
@@ -119,16 +113,9 @@
           "Worked on odometry for a standard four-wheel configuration.",
           "Prepared LaserScan integration for SLAM experiments."
         ],
-        "architecture": "RPLIDAR A3M1 → ROS 2 / Jetson → SLAM & Nav2 → (Vx, Vy, W) → STM32 / Swerve",
+        "architecture": "RPLIDAR → Jetson Nano / ROS 2 ↔ STM32 → Wheel drive",
         "github": "",
-        "demo": "",
-        "situationVi": "Tích hợp LiDAR lên robot với các vấn đề về hướng trục và sai lệch bản đồ.",
-        "taskVi": "Hiệu chuẩn vị trí LiDAR, xây dựng TF/URDF và kiểm tra LaserScan.",
-        "actionVi": "Đo kích thước 700 × 700 mm, kiểm tra góc quét, phân tích dữ liệu ROS bag và thử nghiệm RF2O/slam_toolbox.",
-        "resultVi": "Đã thu thập mẫu quét và dữ liệu hiệu chuẩn; SLAM trên robot hoàn thiện vẫn cần kiểm chứng.",
-        "reflectionVi": "Luôn đối chiếu đồng bộ thời gian, trục tọa độ và odometry trước khi tối ưu SLAM.",
-        "evidence": "",
-        "photoUrl": ""
+        "demo": ""
       },
       {
         "id": "magnetic-levitation-pid",
@@ -171,14 +158,7 @@
         ],
         "architecture": "Hall 49E → Arduino / MATLAB → PID → TIP120 / PWM → Electromagnet",
         "github": "",
-        "demo": "",
-        "situationVi": "Nâng từ đòi hỏi điều khiển lực điện từ liên tục theo vị trí nam châm.",
-        "taskVi": "Đo cảm biến Hall, kiểm tra phần công suất và nghiên cứu vòng PID.",
-        "actionVi": "Thử nghiệm đọc Hall, INA219, PWM, MATLAB và phương án hồi tiếp.",
-        "resultVi": "Đã thực hiện các phép đo và thử nghiệm điều khiển; chưa đưa ra độ ổn định đạt chuẩn.",
-        "reflectionVi": "Phải hiệu chuẩn cảm biến và kiểm tra chiều phản hồi/đường đo dòng trước khi chỉnh PID.",
-        "evidence": "",
-        "photoUrl": ""
+        "demo": ""
       },
       {
         "id": "esp32-smart-home",
@@ -221,14 +201,7 @@
         ],
         "architecture": "Sensors → ESP32 ↔ MQTT Broker ↔ Dashboard / Commands",
         "github": "",
-        "demo": "",
-        "situationVi": "Cần giám sát điều kiện môi trường và điều khiển thiết bị linh hoạt.",
-        "taskVi": "Xây dựng logic AUTO/MANUAL, giao tiếp MQTT và hiển thị cục bộ.",
-        "actionVi": "Tạo topic lệnh/trạng thái, đọc DHT22 và cảm biến ánh sáng, tích hợp OLED và client MQTT.",
-        "resultVi": "Đã xây dựng luồng thử nghiệm truyền/nhận và logic điều khiển.",
-        "reflectionVi": "Phân tách trạng thái hệ thống, ngưỡng và lệnh điều khiển giúp kiểm tra dễ dàng.",
-        "evidence": "",
-        "photoUrl": ""
+        "demo": ""
       },
       {
         "id": "modbus-labs",
@@ -396,17 +369,18 @@
       "careerLongVi": "Trong 3–5 năm tới, hướng tới vị trí kỹ sư có thể triển khai và tích hợp hệ thống tự động hóa từ thiết bị, giao tiếp đến giám sát và vận hành an toàn.",
       "careerLongEn": "Within 3–5 years, work toward becoming an engineer capable of integrating safe automation systems from devices and communication to monitoring and operations.",
       "cvPosition": "Thực tập sinh / Kỹ sư Tự động hóa",
-      "portfolioUrl": "https://ndhau25.github.io/automation-portfolio-kinetic/#education",
+      "portfolioUrl": "",
       "portraitUrl": "",
-      "dob": "06/06/2005",
+      "dob": "",
       "education": [
         {
-          "id": "item-mvnl8dgj",
-          "title": "Điều khiển và tự động hóa",
-          "organization": "Đại Học Lạc Hồng, Cơ Điện - Điện Tử",
-          "period": "Khóa 2023",
-          "description": "7.78",
-          "evidence": ""
+          "id": "edu-1",
+          "title": "Chương trình Kỹ thuật Tự động hóa",
+          "organization": "[Điền tên trường, khoa]",
+          "period": "[Niên khóa]",
+          "description": "Hướng học tập: hệ thống nhúng, điều khiển, robot, truyền thông công nghiệp. Hãy bổ sung GPA, học bổng hoặc kết quả có xác nhận nếu có.",
+          "evidence": "",
+          "isPlaceholder": true
         }
       ],
       "courses": [
@@ -427,74 +401,11 @@
           "evidence": ""
         }
       ],
-      "certificates": [
-        {
-          "id": "item-mvnlilhk",
-          "title": "Electrical Properties and Semiconductors",
-          "organization": "coursera",
-          "period": "5 tháng 8 năm 2026",
-          "description": "",
-          "evidence": "https://www.coursera.org/account/accomplishments/certificate/I33O6IGSTYDH"
-        },
-        {
-          "id": "item-mvnlkga8",
-          "title": "Introduction to Materials Science",
-          "organization": "coursera",
-          "period": "5 tháng 8 năm 2026",
-          "description": "",
-          "evidence": "https://www.coursera.org/account/accomplishments/certificate/21I86SP0DGTM"
-        },
-        {
-          "id": "item-mvnll20m",
-          "title": "Cleanroom Fundamentals & Semiconductor Technologies",
-          "organization": "coursera",
-          "period": "2 tháng 8 năm 2026",
-          "description": "",
-          "evidence": "https://www.coursera.org/account/accomplishments/certificate/WR63UW66PFCP"
-        },
-        {
-          "id": "item-mvnlmbil",
-          "title": "Introduction to Semiconductor Packaging",
-          "organization": "coursera",
-          "period": "27 tháng 7 năm 2026",
-          "description": "",
-          "evidence": "https://www.coursera.org/account/accomplishments/certificate/IRN2ALOUFO8W"
-        }
-      ],
-      "experiences": [
-        {
-          "id": "item-mvs1m90h",
-          "title": "Sinh viên nghiên cứu & phát triển Robot tự hành (Robotics R&D)",
-          "organization": "Dự án nghiên cứu và đồ án cá nhân – Ngành Kỹ thuật Tự động hóa",
-          "period": "2026",
-          "description": "Nghiên cứu, thiết kế và phát triển các hệ thống điều khiển tự động và robot di động. Lập trình STM32, ESP32 bằng C/C++; tích hợp cảm biến, động cơ, giao tiếp CAN, UART và micro-ROS. Xây dựng robot Swerve 4 bánh sử dụng ROS 2 Humble, RPLIDAR A3M1, SLAM Toolbox, RF2O Odometry và Nav2 để lập bản đồ, định vị và điều hướng tự động. Thực hiện cấu hình, hiệu chuẩn, kiểm thử hệ thống và phân tích dữ liệu bằng Python, MATLAB/Simulink. Có kinh nghiệm xử lý lỗi phần cứng, phần mềm và tối ưu thuật toán điều khiển thông qua các dự án thực tế.",
-          "evidence": ""
-        }
-      ],
+      "certificates": [],
+      "experiences": [],
       "awards": [],
       "activities": [],
-      "hobbies": [
-        {
-          "id": "item-mvnlq3sl",
-          "title": "Đá bóng",
-          "description": "Vì nó có chúng cách làm việc đó là teamwork"
-        },
-        {
-          "id": "item-mvnlq9ze",
-          "title": "Cầu lông",
-          "description": ""
-        },
-        {
-          "id": "item-mvnlqgnv",
-          "title": "Game",
-          "description": ""
-        },
-        {
-          "id": "item-mvnlqose",
-          "title": "Xem phim",
-          "description": ""
-        }
-      ],
+      "hobbies": [],
       "softSkills": [
         "Phân tích và giải quyết vấn đề",
         "Tự học kỹ thuật",
@@ -552,14 +463,6 @@
           "description": "Thêm video trình diễn cảm biến, màn hình OLED và chế độ AUTO/MANUAL.",
           "projectId": "esp32-smart-home",
           "isPlaceholder": true
-        },
-        {
-          "id": "item-mvnltlao",
-          "title": "Trạm sạc xe điện",
-          "type": "",
-          "url": "https://github.com/NDHau25/Tram_sac_xe_dien",
-          "description": "",
-          "projectId": ""
         }
       ]
     }
