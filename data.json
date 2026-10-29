@@ -1,5 +1,5 @@
 {
-  "savedAt": 1793243910681,
+  "savedAt": 1793244512317,
   "content": {
     "profile": {
       "name": "Nguyễn Đình Hậu",
@@ -369,7 +369,7 @@
       "careerLongVi": "Trong 3–5 năm tới, hướng tới vị trí kỹ sư có thể triển khai và tích hợp hệ thống tự động hóa từ thiết bị, giao tiếp đến giám sát và vận hành an toàn.",
       "careerLongEn": "Within 3–5 years, work toward becoming an engineer capable of integrating safe automation systems from devices and communication to monitoring and operations.",
       "cvPosition": "Thực tập sinh / Kỹ sư Tự động hóa",
-      "portfolioUrl": "",
+      "portfolioUrl": "https://ndhau25.github.io/automation-portfolio-kinetic/",
       "portraitUrl": "",
       "dob": "",
       "education": [
@@ -378,7 +378,7 @@
           "title": "Chương trình Kỹ thuật Tự động hóa",
           "organization": "Trường Đại Học Lạc Hồng, Khoa Cơ Điện - Điện Tử",
           "period": "2023 - 2027",
-          "description": "Hướng học tập: hệ thống nhúng, điều khiển, robot, truyền thông công nghiệp. Hãy bổ sung GPA, học bổng hoặc kết quả có xác nhận nếu có.",
+          "description": "Tập trung học tập và thực hành hệ thống nhúng, điều khiển, robot và truyền thông công nghiệp. Vận dụng kiến thức qua các đồ án STM32, ESP32, Arduino, ROS 2, PID và mô phỏng dây chuyền sản xuất.",
           "evidence": ""
         }
       ],
@@ -445,8 +445,23 @@
         }
       ],
       "awards": [],
-      "activities": [],
-      "hobbies": [],
+      "activities": [
+        {
+          "id": "item-mvszg2si",
+          "title": "Tự học và thực hành dự án kỹ thuật ngoài giờ học",
+          "organization": "Hoạt động cá nhân • Tự nghiên cứu và triển khai",
+          "period": "2025–2026",
+          "description": "Chủ động tìm hiểu tài liệu và thực hành STM32, ESP32, Arduino, ROS 2 và MQTT qua các nguyên mẫu robot, giám sát IoT và điều khiển nhiệt độ. Thử nghiệm từng chức năng, đối chiếu dữ liệu cảm biến và ghi lại lỗi để cải tiến hệ thống. Bổ sung kiến thức vật liệu và công nghệ bán dẫn qua bốn khóa học đã hoàn thành trên Coursera.",
+          "evidence": ""
+        }
+      ],
+      "hobbies": [
+        {
+          "id": "item-mvszfcyz",
+          "title": "Chế tạo robot, lập trình nhúng và khám phá công nghệ tự động hóa",
+          "description": "Yêu thích kết nối cảm biến, vi điều khiển và phần mềm để xây dựng nguyên mẫu; tìm hiểu ROS 2, IoT và điều khiển PID thông qua dự án cá nhân. Thói quen thử nghiệm, phân tích lỗi và ghi chép giúp phát triển tư duy kỹ thuật và khả năng tự học."
+        }
+      ],
       "softSkills": [
         "Phân tích và giải quyết vấn đề",
         "Tự học kỹ thuật",
