@@ -1,5 +1,5 @@
 {
-  "savedAt": 1793243658169,
+  "savedAt": 1793243910681,
   "content": {
     "profile": {
       "name": "Nguyễn Đình Hậu",
@@ -434,7 +434,16 @@
           "evidence": "https://www.coursera.org/account/accomplishments/verify/IRN2ALOUFO8W"
         }
       ],
-      "experiences": [],
+      "experiences": [
+        {
+          "id": "item-mvsz4f4a",
+          "title": "Phát triển hệ thống nhúng, điều khiển và robot (kinh nghiệm đồ án)",
+          "organization": "Đồ án học tập và dự án cá nhân",
+          "period": "2025–2026",
+          "description": "Thực hành thiết kế, lập trình và tích hợp các nguyên mẫu tự động hóa trong quá trình học tập.\n• Lập trình STM32, ESP32 và Arduino để đọc cảm biến, hiển thị dữ liệu và điều khiển relay, servo qua GPIO, ADC, PWM, I²C và UART.\n• Tích hợp Jetson Nano, STM32 và LiDAR trên ROS 2 Humble; xây dựng URDF/TF2, thử nghiệm odometry và SLAM cho robot di động.\n• Xây dựng hệ thống ESP32 giám sát nhiệt độ, độ ẩm, ánh sáng và điều khiển thiết bị qua MQTT; thực hành truyền thông Modbus RTU/TCP.\n• Thử nghiệm điều khiển PID, quan sát tín hiệu cảm biến và điều chỉnh thông số; sử dụng Python, MATLAB và các công cụ mô phỏng để hỗ trợ kiểm tra.\n• Phân tích lỗi, ghi lại quá trình thử nghiệm và viết báo cáo kỹ thuật; rèn luyện tự học và phối hợp trong đồ án.",
+          "evidence": ""
+        }
+      ],
       "awards": [],
       "activities": [],
       "hobbies": [],
