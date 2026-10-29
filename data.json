@@ -1,5 +1,5 @@
 {
-  "savedAt": 1793200157089,
+  "savedAt": 1793243658169,
   "content": {
     "profile": {
       "name": "Nguyễn Đình Hậu",
@@ -376,11 +376,10 @@
         {
           "id": "edu-1",
           "title": "Chương trình Kỹ thuật Tự động hóa",
-          "organization": "[Điền tên trường, khoa]",
-          "period": "[Niên khóa]",
+          "organization": "Trường Đại Học Lạc Hồng, Khoa Cơ Điện - Điện Tử",
+          "period": "2023 - 2027",
           "description": "Hướng học tập: hệ thống nhúng, điều khiển, robot, truyền thông công nghiệp. Hãy bổ sung GPA, học bổng hoặc kết quả có xác nhận nếu có.",
-          "evidence": "",
-          "isPlaceholder": true
+          "evidence": ""
         }
       ],
       "courses": [
@@ -401,7 +400,40 @@
           "evidence": ""
         }
       ],
-      "certificates": [],
+      "certificates": [
+        {
+          "id": "item-mvsyxbkq",
+          "title": "Electrical Properties and Semiconductors",
+          "organization": "Arizona State University",
+          "period": "08/2026",
+          "description": "Hoàn thành khóa học trên Coursera.",
+          "evidence": "https://www.coursera.org/account/accomplishments/verify/I33O6IGSTYDH"
+        },
+        {
+          "id": "item-mvsyybvs",
+          "title": "Introduction to Materials Science",
+          "organization": "Arizona State University",
+          "period": "08/2026",
+          "description": "Hoàn thành khóa học trên Coursera.",
+          "evidence": "https://www.coursera.org/account/accomplishments/verify/21I86SP0DGTM"
+        },
+        {
+          "id": "item-mvsyyi55",
+          "title": "Cleanroom Fundamentals & Semiconductor Technologies",
+          "organization": "University at Buffalo • The State University of New York",
+          "period": "08/2026",
+          "description": "Hoàn thành khóa học trên Coursera.",
+          "evidence": "https://www.coursera.org/account/accomplishments/verify/WR63UW66PFCP"
+        },
+        {
+          "id": "item-mvsyyo5h",
+          "title": "Introduction to Semiconductor Packaging",
+          "organization": "Arizona State University",
+          "period": "07/2026",
+          "description": "Hoàn thành khóa học trên Coursera.",
+          "evidence": "https://www.coursera.org/account/accomplishments/verify/IRN2ALOUFO8W"
+        }
+      ],
       "experiences": [],
       "awards": [],
       "activities": [],
